@@ -18,14 +18,16 @@ from django.conf import settings
 from django.urls import include, path
 from django.views.generic.base import TemplateView
 from tracker.views import SignUpView
-
+from tracker import views
 
 urlpatterns = [
+    path('', views.habit_list, name='habit_list'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('admin/', admin.site.urls),
     path('signup/', SignUpView.as_view(), name='signup'),
     path('users/', include('django.contrib.auth.urls')),
-
+    path('create_habit/', views.create_habit, name='create_habit'),
+    path('log_list/', views.log_list, name='log_list'),
 ]
 
 if settings.DEBUG:

@@ -25,11 +25,16 @@ class Habit(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     habit_achieved = models.BooleanField(default=False)
-    total_success_number = models.DecimalField(
+    total_number = models.DecimalField(
         max_digits=9, 
         decimal_places=2,
-        blank=True
+        blank=True,
         )
+    number_per_day = models.DecimalField(
+        max_digits=9,
+        decimal_places=2,
+        blank=True
+    )
     supporters = models.ManyToManyField(
         to='Supporter',
         blank=True,
