@@ -10,6 +10,10 @@ psycopg2 = "*"
 pillow = "*"
 django-debut-toolbar = "*"
 django-debug-toolbar = "*"
+django-bootstrap-datepicker-plus = "*"
+django-bootstrap4 = "*"
+djangorestframework = "*"
+django-widget-tweaks = "*"
 
 [requires]
 python_version = "3.7"

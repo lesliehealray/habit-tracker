@@ -37,9 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap_datepicker_plus',
     'debug_toolbar',
     'psycopg2',
+    'rest_framework',
+    'widget_tweaks',
     'crispy_forms',
+    'bootstrap4',
     'tracker',
 ]
 
@@ -129,7 +133,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+BOOTSTRAP4 = {
+    'include_jquery': True,
+}
 
 AUTH_USER_MODEL = 'tracker.CustomUser'
 

@@ -3,6 +3,8 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+{% load static %}
+
 {% if user.is_authenticated and user.profile_name %}
   Welcome {{ user.profile_name }}
 {% elif user.is_authenticated and user.username %}
@@ -13,26 +15,30 @@
   <a href="{% url 'signup' %}">Create New Account</a>
 </div>
 {% endif %}
-
-
 {% if user.is_authenticated %}
-<div class="card-group">
-{% for habit in habits %}
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">{{ habit.title }}</h5>
-        <p class="card-text">Start Date: {{ habit.start_date }}</p>
-        <p class="card-text">End Date: {{ habit.end_date }}</p>
-        <a href="{% url 'log_list'  %}" class="btn btn-light">Update</a>
-
-      </div>
-      <div class="card-footer">
-        <small class="text-muted">Supporters: {% for supporter in habit.supporters.all %} {{ supporter }} {% endfor %}</small>        
-      </div>
+<div class="container">
+  <div class="card-deck">
+      <div class="row">
+        {% for habit in habits %}
+        <div class="row">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ habit.title }}</h5>
+                <p class="card-text">Start Date: {{ habit.start_date }}</p>
+                <p class="card-text">End Date: {{ habit.end_date }}</p>
+                <a href="{% url 'habit_detail' habit.slug  %}" class="btn btn-light">View</a>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">Supporters: {% for supporter in habit.supporters.all %} {{ supporter }} {% endfor %}</small>        
+              </div>
+            </div>
+          </div> 
+        </div>      
+        {% endfor %} 
     </div>
-                   
-{% endfor %} 
+  </div>
 {% else %}
-<p>No entry</p>  
+  <p>No entry</p>  
 {% endif %}
 {% endblock %}
+

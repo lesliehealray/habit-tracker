@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
-
 {% load crispy_forms_tags %}
+{% load bootstrap4 %}
 
 {% block title %}Create a New Habit{% endblock %}
 
 {% block content %}
-
+{{ form.media }}
 <p>Create a New Habit</p>
 <form method="post">
   {% csrf_token %}
-  {{ form|crispy}}
-  <button type="submit">Submit</button>
+  {% bootstrap_form form %}
+  {% buttons %}
+      <button type="submit" class="btn btn-primary">Submit</button>
+  {% endbuttons %}
 </form>
 {% endblock %}

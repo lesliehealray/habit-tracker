@@ -18,6 +18,7 @@ from django.conf import settings
 from django.urls import include, path
 from django.views.generic.base import TemplateView
 from tracker.views import SignUpView
+from rest_framework.urlpatterns import format_suffix_patterns
 from tracker import views
 
 urlpatterns = [
@@ -27,8 +28,11 @@ urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
     path('users/', include('django.contrib.auth.urls')),
     path('create_habit/', views.create_habit, name='create_habit'),
-    path('log_list/', views.log_list, name='log_list'),
+    path('habit/<slug:slug>', views.habit_detail, name='habit_detail'),
+    path('api/log/<int:pk>/', views.logapi.as_view())
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'html'])
 
 if settings.DEBUG:
     import debug_toolbar
