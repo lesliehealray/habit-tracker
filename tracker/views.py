@@ -46,6 +46,23 @@ class LogEdit(UpdateView):
         self.object = form.save()
         return render(self.request, 'log_edit_success.html', {'log': self.object})
 
+def log_entry(request, slug, pk):
+    log = get_object_or_404(Log, id=pk)
+    habit = get_object_or_404(Habit, slug=slug)
+    if log.habit.slug != habit.slug:
+        raise Http404
+    return render(request, 'log_entry.html', {
+        'log': log,
+    })
+
+def get_comment(request, pk):
+    comment = get_object_or_404(Comment, id=pk)
+    log = get_object_or_404(Log, id=pk)
+    if comment.log.id != log.id:
+        raise Http404
+    return render(request,'log_entry.html'), {
+        'comment': comment,
+    }
 
 class logapi(APIView):
     def get_object(self, pk):

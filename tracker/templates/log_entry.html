@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Habit Log Entry {% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+<div class="card">
+    <h3 class="log-title text-center text-info">
+        {{ log.habit.title }}
+    </h3>
+    <p class="start-end-date text-center font-weight-bold text-info">
+        Start date: {{ log.habit.start_date }} End date: {{ log.habit.end_date }}
+    </p>
+    <p class="log-date text-center font-weight-bold text-info">
+        Log date: {{ log.log_date }}
+    </p>
+    <p class="supporters text-center font-weight-normal text-info">Supporter(s): {% for supporter in log.habit.supporters.all %} {{ supporter }} {% endfor %}</p>
+    <p class="log-date text-center font-weight-normal text-info">
+        Action taken: {{ log.log_detail }}
+    </p>
+</div>
+<div class="card">
+    <h4 class="comment-title font-weight-normal">Comments</h4>
+</div>
+
+{% endif %}
+{% endblock %}
+
+
+

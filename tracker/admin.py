@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
 from tracker.forms import CustomUserCreationForm, CustomUserChangeForm
-from tracker.models import CustomUser, Habit, Log
+from tracker.models import CustomUser, Habit, Log, Comment
 
 
 class CustomUserAdmin(UserAdmin):
@@ -16,6 +16,7 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Habit)
 admin.site.register(Log)
+admin.site.register(Comment)
 
 
 

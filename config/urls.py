@@ -14,10 +14,10 @@ urlpatterns = [
     path('signup/', views.SignUpView.as_view(template_name="signup.html"), name='signup'),
     path('users/', include('django.contrib.auth.urls')),
     path('create_habit/', views.create_habit, name='create_habit'),
+    path('habit/<slug:slug>/log/<int:pk>', views.log_entry, name='log_entry'), 
     path('habit/<slug:slug>', views.habit_detail, name='habit_detail'),
     path('api/log/<int:pk>', views.logapi),
-    path('log_edit/<int:pk>', views.LogEdit.as_view(template_name="log_edit.html"), name='log_edit'), 
-    
+    path('log_edit/<int:pk>', views.LogEdit.as_view(template_name="log_edit.html"), name='log_edit'),      
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'html'])

@@ -18,9 +18,8 @@
             <h5 class="card-title text-center">{{ log.habit_log }}</h5>
             <p class="card-text text-center">Number Completed: {{ log.log_number_completed }}</p>
             <p class="card-text text-center">Date: {{ log.log_date }}</p>
-            <a href="{% url 'log_edit' log.id %}" class="btn btn-outline-info log_edit" data-toggle="modal" data-target="#modal" data-pk="{{ log.id }}" aria-pressed="false" autocomplete="off">
-            Edit</a>
-            <a href="#" class="btn btn-outline-info log_edit">View</a>
+            <a href="{% url 'log_entry' habit.slug log.id %}" class="btn btn-outline-info log_edit ">View</a>
+            <a href="{% url 'log_edit' log.id %}" class="btn btn-outline-info log_edit float-right" data-toggle="modal" data-target="#modal" data-pk="{{ log.id }}" aria-pressed="false" autocomplete="off">Edit</a>
           </div>
           <div class="card-footer">
             <small class="text-muted">Supporters: {% for supporter in habit.supporters.all %} {{ supporter }} {% endfor %}</small>        

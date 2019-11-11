@@ -64,9 +64,7 @@ class Habit(models.Model):
         if not self.id:
             self.end_date=self.start_date + d
         super().save(*args, **kwargs)
-    
-    
-
+        
 class Log(models.Model):
     log_number_completed = models.DecimalField(
         max_digits=9, 
@@ -86,6 +84,7 @@ class Log(models.Model):
         related_name='habit_log'
     )
     log_date = models.DateField()
+    
 
     class Meta:
         ordering = ["log_date"]

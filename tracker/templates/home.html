@@ -28,11 +28,11 @@
           <h5 class="card-title text-center">{{ habit.title }}</h5>
           <p class="card-text text-center">Start Date: {{ habit.start_date }}</p>
           <p class="card-text text-center">End Date: {{ habit.end_date }}</p>
-          <a href="{% url 'habit_detail' habit.slug  %}" class="btn btn-outline-info">Edit</a>
-          <a href="#" class="btn btn-outline-info">View</a>
+          <a href="{% url 'habit_detail' habit.slug  %}" class="btn btn-outline-info">View</a>
+          <a href="#" class="btn btn-outline-danger float-right">Delete</a>
         </div>
         <div class="card-footer">
-          <small class="text-muted">Supporters: {% for supporter in habit.supporters.all %} {{ supporter }} {% endfor %}</small>        
+          <small class="text">Supporters: {% for supporter in habit.supporters.all %} {{ supporter }} {% endfor %}</small>        
         </div> 
       </div>
     </div>  
