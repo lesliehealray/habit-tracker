@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy, reverse
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from tracker.models import Habit, Log
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.views import APIView
@@ -37,6 +37,15 @@ def create_habit(request):
         form = HabitForm()
     
     return render(request, "create_habit.html", {"form": form})
+
+class LogEdit(UpdateView):
+    model = Log
+    fields = ['log_number_completed', 'log_detail']
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return render(self.request, 'log_edit_success.html', {'log': self.object})
+
 
 class logapi(APIView):
     def get_object(self, pk):

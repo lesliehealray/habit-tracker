@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.text import slugify
 from datetime import date, timedelta
+from django.db.models import Sum
 
 class CustomUser(AbstractUser):
     profile_name = models.CharField(max_length=30)
@@ -35,6 +36,7 @@ class Habit(models.Model):
         max_digits=9, 
         decimal_places=2,
         blank=True,
+        null=True
         )
     number_per_day = models.DecimalField(
         max_digits=9,
@@ -49,6 +51,10 @@ class Habit(models.Model):
 
     def __str__(self):
         return self.title 
+
+    @property
+    def total_completed(self):
+        return self.habit_log.aggregate(Sum('log_number_completed'))['log_number_completed__sum']
 
     def save(self, *args, **kwargs):
         value = self.title
@@ -80,6 +86,9 @@ class Log(models.Model):
         related_name='habit_log'
     )
     log_date = models.DateField()
+
+    class Meta:
+        ordering = ["log_date"]
     
     def __str__(self):
         return self.log_detail

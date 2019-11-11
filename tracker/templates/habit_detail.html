@@ -3,34 +3,55 @@
 {% block title %}Log List{% endblock %}
 
 {% block content %}
-{% load static %}
-{% if user.is_authenticated %}
-<p class="font-weight-bold text-center"> {{ habit.title }}</p>
-<p class="card-title text-center">Start Date: {{ habit.start_date }} </p>
 
-<div class="card-deck center">
+{% if user.is_authenticated %}
+<div class="container">
+  <p class="font-weight-bold text-center"> {{ habit.title }}</p>
+  <p class="card-title text-center">Start date: {{ habit.start_date }} </p>
+  <p class="card-title text-center">Total completed: {{ habit.total_completed }} </p>
+</div>
+
+<div class="row">
   {% for log in habit.habit_log.all %}
     {% if log.is_visible %}
-      <div class="row">
+      <div class="col-sm-4">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">{{ log.habit_log }}</h5>
             <p class="card-text">Number Completed: {{ log.log_number_completed }}</p>
             <p class="card-text">Date: {{ log.log_date }}</p>
-            <a href="#" class="btn btn-outline-info btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off">
-            Log</a>
-          </div>
-          <div class="card-footer">
-            <small class="text-muted">Supporters: {% for supporter in habit.supporters.all %} {{ supporter }} {% endfor %}</small>        
+            <a href="{% url 'log_edit' log.id %}" class="btn btn-outline-info log_edit" data-toggle="modal" data-target="#modal" data-pk="{{ log.id }}" aria-pressed="false" autocomplete="off">
+            Edit</a>
+            <a href="#" class="btn btn-outline-info log_edit">View</a>
+            <div class="card-footer">
+              <small class="text-muted">Supporters: {% for supporter in habit.supporters.all %} {{ supporter }} {% endfor %}</small>        
+            </div>
           </div>
         </div>
       </div>
-    {% endif %}
-  {% endfor %} 
+  {% endif %}
+{% endfor %} 
 </div>
                    
 {% else %}
   <p>No entry</p>  
 {% endif %}
-
+<div class="modal" role="dialog" id="modal"></div>
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<script>
+    $('#modal').on('show.bs.modal', function (e) {
+        var logId = $(e.relatedTarget).data('pk');
+        var modal = $(this)
+        $.ajax({
+            url: "/log_edit/" + logId,
+            context: document.body
+        }).done(function(response) {
+            modal.html(response);
+        });
+    })
+    $('#modal').on('click', '#close', function (e) {
+      $("#modal").modal('hide');
+    });
+   
+    </script>
 {% endblock %}
