@@ -11,7 +11,7 @@ urlpatterns = [
     path('', views.habit_list, name='habit_list'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('admin/', admin.site.urls),
-    path('signup/', views.SignUpView, name='signup'),
+    path('signup/', views.SignUpView.as_view(template_name="signup.html"), name='signup'),
     path('users/', include('django.contrib.auth.urls')),
     path('create_habit/', views.create_habit, name='create_habit'),
     path('habit/<slug:slug>', views.habit_detail, name='habit_detail'),
