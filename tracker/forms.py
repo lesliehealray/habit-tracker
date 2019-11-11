@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from bootstrap_datepicker_plus import DatePickerInput
 from django.contrib.admin.widgets import AdminDateWidget
-from tracker.models import CustomUser, Habit
+from tracker.models import CustomUser, Habit, Comment
 
 
 
@@ -27,4 +27,9 @@ class HabitForm(forms.ModelForm):
             'start_date': DatePickerInput()               
         }    
     
-    
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment 
+        fields = '__all__'
+        widgets = {'log': forms.HiddenInput(), 'comment_date': forms.HiddenInput()}

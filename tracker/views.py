@@ -1,14 +1,14 @@
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView, UpdateView
-from tracker.models import Habit, Log
+from tracker.models import Habit, Log, Comment
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from tracker.serializers import LogSerializer, CommentSerializer
 from django.http import Http404
-
-from tracker.forms import CustomUserCreationForm, HabitForm
+from tracker.forms import CustomUserCreationForm, HabitForm, CommentForm
+from datetime import date
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
@@ -35,7 +35,6 @@ def create_habit(request):
             return redirect(to='home')
     else:
         form = HabitForm()
-    
     return render(request, "create_habit.html", {"form": form})
 
 class LogEdit(UpdateView):
@@ -51,18 +50,18 @@ def log_entry(request, slug, pk):
     habit = get_object_or_404(Habit, slug=slug)
     if log.habit.slug != habit.slug:
         raise Http404
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save()
+            return redirect(to='log_entry', slug=log.habit.slug, pk=log.id)
+    else:
+        form = CommentForm(initial={'comment_date':date.today(),'log':log})
     return render(request, 'log_entry.html', {
         'log': log,
+        'form': form
     })
 
-def get_comment(request, pk):
-    comment = get_object_or_404(Comment, id=pk)
-    log = get_object_or_404(Log, id=pk)
-    if comment.log.id != log.id:
-        raise Http404
-    return render(request,'log_entry.html'), {
-        'comment': comment,
-    }
 
 class logapi(APIView):
     def get_object(self, pk):

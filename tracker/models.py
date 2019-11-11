@@ -85,7 +85,6 @@ class Log(models.Model):
     )
     log_date = models.DateField()
     
-
     class Meta:
         ordering = ["log_date"]
     
@@ -97,17 +96,19 @@ class Log(models.Model):
     def is_visible(self):
         return self.log_date <= date.today()
 
-
-
 class Comment(models.Model):
     log = models.ForeignKey(
         to=Log,
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        related_name='log'
+        related_name='log_comments'
     )
     comment_body = models.CharField(max_length=255)
+    comment_date = models.DateField(null=True)
+
+    class Meta:
+        ordering = ["comment_date", "id"]
 
     def __str__(self):
         return self.comment_body
@@ -117,6 +118,7 @@ class Supporter(models.Model):
     user = models.ForeignKey(
         to=CustomUser,
         on_delete=models.CASCADE,
+        related_name='user_supporter'
     )
     accepted = models.BooleanField(default=False)
     token = models.CharField(max_length=64)
