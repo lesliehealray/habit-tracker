@@ -28,14 +28,17 @@ def habit_list(request):
 
 def habit_detail(request, slug):
     habit = get_object_or_404(Habit, slug=slug)
+    is_supporter_or_owner = request.user in habit.supporter.all() or request.user == habit.user
+    # use the above to show or hide forms based on whether they are user or supporter. Put in context
     if request.method == "POST":
         form = SupporterForm(request.POST)
         if form.is_valid():
+            # no validator to validate the email field...?
             email = form.cleaned_data['new_supporter_email']
             if CustomUser.objects.get(email=email):
                 user = CustomUser.objects.get(email=email)
             else:
-                #TODO create user
+                #TODO create inactive user send another message to have user finish creating account
                 pass
             supporter = Supporter(
                 user=user,
@@ -47,6 +50,8 @@ def habit_detail(request, slug):
             If you would like to support {habit.user.username} in accomplishing their
             goal of {habit.title}, click here (TODO: make a link to the token thing)
             """
+            # above email, ideally has a link that is like /accept_invite/supporter.token, 
+            # upon clicking, the server would look up supporter by the token value and add that supporter to the habit.supporters
             sender = "info@server.com"
             recipients = [email]
 
