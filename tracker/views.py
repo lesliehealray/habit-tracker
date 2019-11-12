@@ -1,14 +1,19 @@
+from datetime import date
+
+from django.core.mail import send_mail
+from django.http import Http404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView, UpdateView
-from tracker.models import Habit, Log, Comment
-from django.shortcuts import render, redirect, get_object_or_404
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
+from tracker.forms import CustomUserCreationForm, HabitForm, CommentForm, SupporterForm
+from tracker.models import Habit, Log, Comment, CustomUser, Supporter
 from tracker.serializers import LogSerializer, CommentSerializer
-from django.http import Http404
-from tracker.forms import CustomUserCreationForm, HabitForm, CommentForm
-from datetime import date
+
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
@@ -23,8 +28,36 @@ def habit_list(request):
 
 def habit_detail(request, slug):
     habit = get_object_or_404(Habit, slug=slug)
+    if request.method == "POST":
+        form = SupporterForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['new_supporter_email']
+            if CustomUser.objects.get(email=email):
+                user = CustomUser.objects.get(email=email)
+            else:
+                #TODO create user
+                pass
+            supporter = Supporter(
+                user=user,
+                token='token'
+            ).save()
+
+            subject = f"{habit.user.username} added you as a supporter!"
+            message = f"""
+            If you would like to support {habit.user.username} in accomplishing their
+            goal of {habit.title}, click here (TODO: make a link to the token thing)
+            """
+            sender = "info@server.com"
+            recipients = [email]
+
+            send_mail(subject, message, sender, recipients)
+
+            return redirect(to='habit_detail', slug=habit.slug)
+    else:
+        form = SupporterForm(initial={'habit':habit})
     return render(request, 'habit_detail.html',{
         'habit': habit,
+        'form': form
     })
 
 def create_habit(request):

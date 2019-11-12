@@ -1,13 +1,22 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load bootstrap4 %}
 
 {% block title %}Log List{% endblock %}
 
 {% block content %}
-
+{{ form.media }}
 {% if user.is_authenticated %}
 <div class="container">
   <p class="font-weight-bold text-center"> {{ habit.title }}</p>
   <p class="card-title text-center font-weight-normal">Start date: {{ habit.start_date }} Total completed: {{ habit.total_completed }} </p>
+  <form method="post">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% buttons %}
+          <button type="submit" class="btn btn-primary">Submit</button>
+      {% endbuttons %}
+  </form>
 </div>
 <div class="row">
   {% for log in habit.habit_log.all %}
@@ -22,7 +31,9 @@
             <a href="{% url 'log_edit' log.id %}" class="btn btn-outline-info log_edit float-right" data-toggle="modal" data-target="#modal" data-pk="{{ log.id }}" aria-pressed="false" autocomplete="off">Edit</a>
           </div>
           <div class="card-footer">
-            <small class="text-muted">Supporters: {% for supporter in habit.supporters.all %} {{ supporter }} {% endfor %}</small>        
+            <p>
+              <small class="text-muted">Supporters: {% for supporter in habit.supporters.all %} {{ supporter }} {% endfor %}</small>        
+            </p>    
           </div>
         </div>
       </div>

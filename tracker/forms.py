@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from bootstrap_datepicker_plus import DatePickerInput
 from django.contrib.admin.widgets import AdminDateWidget
-from tracker.models import CustomUser, Habit, Comment
+from tracker.models import CustomUser, Habit, Comment, Supporter
 
 
 
@@ -33,3 +33,6 @@ class CommentForm(forms.ModelForm):
         model = Comment 
         fields = '__all__'
         widgets = {'log': forms.HiddenInput(), 'comment_date': forms.HiddenInput()}
+
+class SupporterForm(forms.Form):
+    new_supporter_email = forms.EmailField()
